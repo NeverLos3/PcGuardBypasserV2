@@ -15,7 +15,7 @@ func main() {
 	// 5초 동안 멈춥니다.
 	duration := 5 * time.Second
 	time.Sleep(duration)
-	processNames := []string{"iAgent.exe", "iAgent32.exe", "iWatcher.exe", "iService.exe"}
+	processNames := []string{"iAgent.exe", "iAgent32.exe", "iWatcher.exe", "iService.exe", "systemama.exe", "systemams.exe"}
 
 	// 현재 실행 중인 모든 프로세스 목록 가져오기
 	processList, err := process.Processes()
