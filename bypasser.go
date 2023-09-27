@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/sys/windows/registry" // 레지스트리 패키지 추가
+
 	"github.com/shirou/gopsutil/process"
 )
 
@@ -42,6 +44,26 @@ func main() {
 			}
 		}
 	}
+
+	// 프록시 설정을 비활성화할 레지스트리 키 경로
+	keyPath := `SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings`
+
+	// 레지스트리 키 열기 (키 경로에 대한 쓰기 권한 필요)
+	key, err := registry.OpenKey(registry.CURRENT_USER, keyPath, registry.SET_VALUE)
+	if err != nil {
+		fmt.Printf("레지스트리 키 열기 실패: %v\n", err)
+		return
+	}
+	defer key.Close()
+
+	// 프록시 설정 비활성화
+	err = key.SetDWordValue("ProxyEnable", 0)
+	if err != nil {
+		fmt.Printf("프록시 설정 비활성화 실패: %v\n", err)
+		return
+	}
+
+	fmt.Println("프록시 설정이 비활성화되었습니다.")
 	fmt.Println("프로그램을 종료하려면 엔터 키를 누르세요.")
 	fmt.Scanln() // 엔터 키를 누를 때까지 대기
 }
